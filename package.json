@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/imansawi/tinyapp/issues"
   },
-  "homepage": "https://github.com/imansawi/tinyapp#readme"
+  "homepage": "https://github.com/imansawi/tinyapp#readme",
+  "dependencies": {
+    "eslint": "^7.20.0",
+    "express": "^4.17.1"
+  }
 }

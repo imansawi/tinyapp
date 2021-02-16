@@ -2,9 +2,11 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+app.use (morgan("dev"));
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -53,6 +55,12 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+app.post("/urls/:shortURL/delete", (req, res) => {
+  const shortURLtoDelete = req.params.shortURL;
+  delete urlDatabase[shortURLtoDelete];
+  res.redirect('/urls');
+});
+
 app.post("/urls", (req, res) => {
   //console.log(req.body);  // Log the POST request body to the console
   const newshortURL = generateRandomString();
@@ -64,6 +72,8 @@ app.post("/urls", (req, res) => {
   console.log(req.body);  // Log the POST request body to the console
   res.send("Ok");         // Respond with 'Ok' (we will replace this)
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);

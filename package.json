@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/imansawi/tinyapp#readme",
   "dependencies": {
+    "ejs": "^3.1.6",
     "eslint": "^7.20.0",
     "express": "^4.17.1"
   }

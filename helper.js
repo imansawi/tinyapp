@@ -2,27 +2,27 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
-// URLs Database
-const urlDatabase = {
-  b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
-  "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
-  b6UTxQ: { longURL: "https://www.tsn.ca", userId: "aJ48lW" },
-  i3BoGr: { longURL: "https://www.google.ca", userId: "aJ48lW" },
-};
+// // URLs Database
+// const urlDatabase = {
+//   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
+//   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
+//   b6UTxQ: { longURL: "https://www.tsn.ca", userId: "aJ48lW" },
+//   i3BoGr: { longURL: "https://www.google.ca", userId: "aJ48lW" },
+// };
 
-// Users Database
-const users = {
-  userRandomID: {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: bcrypt.hashSync("purple-monkey-dinosaur", salt),
-  },
-  user2RandomID: {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: bcrypt.hashSync("dishwasher-funk", salt),
-  },
-};
+// // Users Database
+// const users = {
+//   userRandomID: {
+//     id: "userRandomID",
+//     email: "user@example.com",
+//     password: bcrypt.hashSync("purple-monkey-dinosaur", salt),
+//   },
+//   user2RandomID: {
+//     id: "user2RandomID",
+//     email: "user2@example.com",
+//     password: bcrypt.hashSync("dishwasher-funk", salt),
+//   },
+// };
 
 //====================================================
 // Generate a Random String
@@ -35,7 +35,7 @@ function generateRandomString() {
 //====================================================
 // Get a User by Email
 //====================================================
-const findUserByEmail = (email) => {
+const findUserByEmail = (users, email) => {
   for (let userId in users) {
     if (users[userId].email === email) {
       return users[userId];
@@ -61,10 +61,13 @@ const UserUrls = function (urlDatabase, userID) {
 // Function Validates an Email & a Password with the UserDatabase
 //===============================================================
 const userAuthentication = function (users, email, password) {
-  const id = findUserByEmail(users, email);
+  //console.log("User:", users, email, password);
+  const user = findUserByEmail(users, email);
+  const id = user.id;
+  console.log("id ", id)
   if (id) {
     /////// email found, check the password next
-    if (bcrypt.compareSync(requestedPassword, users[id].password)) {
+    if (bcrypt.compareSync(password, users[id].password)) {
       // Success! GOOD Password
       return true;
     } else {

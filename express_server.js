@@ -8,8 +8,20 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
+<<<<<<< HEAD
 const { generateRandomString, findUserByEmail, UserUrls,
   userAuthentication, findUrl, userIdURLs, URLsforUser } = require("./helper");
+=======
+const {
+  generateRandomString,
+  findUserByEmail,
+  UserUrls,
+  userAuthentication,
+  findUrl,
+  userIdURLs,
+  URLsforUser,
+} = require("./helper");
+>>>>>>> feature/user-registration
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -24,6 +36,10 @@ app.use(
 );
 
 // URLs Database
+<<<<<<< HEAD
+=======
+//====================================================
+>>>>>>> feature/user-registration
 const urlDatabase = {
   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
@@ -32,6 +48,10 @@ const urlDatabase = {
 };
 
 // Users Database
+<<<<<<< HEAD
+=======
+//====================================================
+>>>>>>> feature/user-registration
 const users = {
   userRandomID: {
     id: "userRandomID",
@@ -98,7 +118,11 @@ app.get("/urls", (req, res) => {
   let error = "";
   const userId = req.session.user_id;
   const user = users[userId];
+<<<<<<< HEAD
   console.log(user)
+=======
+  console.log(user);
+>>>>>>> feature/user-registration
   const urls = UserUrls(urlDatabase, userId);
   // if (!userId) {
   //   error = "NOT Registered!!/ NOT Loggedin!!";
@@ -335,4 +359,8 @@ app.listen(PORT, () => {
 //   res.clearCookie("username");
 //   console.log("logout");
 //   res.redirect("/urls");
+<<<<<<< HEAD
 // });
+=======
+// });
+>>>>>>> feature/user-registration

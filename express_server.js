@@ -24,6 +24,7 @@ app.use(
 );
 
 // URLs Database
+//====================================================
 const urlDatabase = {
   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
@@ -32,6 +33,7 @@ const urlDatabase = {
 };
 
 // Users Database
+//====================================================
 const users = {
   userRandomID: {
     id: "userRandomID",

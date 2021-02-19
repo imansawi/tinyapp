@@ -18,6 +18,8 @@ TinyApp is a full stack web app built with Node and Express that allows users to
 - bcrypt
 - body-parser
 - cookie-session
+- morgan
+- mocha and Chai
 
 ## Getting Started
 

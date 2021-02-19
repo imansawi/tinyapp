@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('partials/_header') %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -10,7 +9,11 @@
   <title>TinyApp</title>
 </head>
 <body>
+
+  <%- include('partials/_header') %>
+
   <main style="margin: 1em;">
+    <!-- <h6>Not a user? Please <a margin = "20px" font-weight="bold" href="/register">REGISTER! </a></h6> -->
     <h3>My URLs</h3>
     <table class="table">
       <thead>
@@ -25,19 +28,26 @@
         <% for(let url in urls) { %>
           <tr>
             <td><%= url %></td>
-            <td><%= urls[url] %></td>
+            <td><%= urls[url].longURL%></td>
             <td>
-              <button onclick="location.href='urls/<%= url %>'">EDIT</button>
+              <form method="GET" action="/urls/<%= url %>">
+                <!-- <input type="submit" class="btn btn-primary" value="Edit" /> -->
+                <button onclick="location.href='urls/<%= url %>'" class="btn btn-primary">Edit</button>
+              </form>
+              
            </td>
             <td>
-              <form method="POST" action="/urls/<%=url%>/delete">
-                <button>DELETE</button>
+              <form method="POST" action="/urls/<%=url %>/delete">
+                <input type="submit" class="btn btn-primary" value="Delete" />
               </form>
             </td>  
           </tr>
         <% } %>
       </tbody>
     </table>
+    <% if(error){ %>
+      <span style="color:red;"><b><%= error %></b>
+      <% } %>
   </main>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

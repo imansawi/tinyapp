@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
@@ -30,7 +30,7 @@ const users = {
 function generateRandomString() {
   const str = Math.random().toString(36).substring(7);
   return str;
-};
+}
 
 //====================================================
 // Get a User by Email
@@ -70,7 +70,7 @@ const userAuthentication = function (users, email, password) {
     } else {
       return false;
     }
-  } 
+  }
   //   else {
   //   // Ultimate failure. BAD email. Don't care about the password
   //   return false;
@@ -125,5 +125,12 @@ const URLsforUser = function (userId, shortURL, urlDatabase) {
 };
 //============================================================
 
-module.exports = { generateRandomString, findUserByEmail, UserUrls,
-  userAuthentication, findUrl, userIdURLs, URLsforUser };
+module.exports = {
+  generateRandomString,
+  findUserByEmail,
+  UserUrls,
+  userAuthentication,
+  findUrl,
+  userIdURLs,
+  URLsforUser,
+};

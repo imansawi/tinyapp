@@ -8,8 +8,15 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
-const { generateRandomString, findUserByEmail, UserUrls,
-  userAuthentication, findUrl, userIdURLs, URLsforUser } = require("./helper");
+const {
+  generateRandomString,
+  findUserByEmail,
+  UserUrls,
+  userAuthentication,
+  findUrl,
+  userIdURLs,
+  URLsforUser,
+} = require("./helper");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -100,7 +107,7 @@ app.get("/urls", (req, res) => {
   let error = "";
   const userId = req.session.user_id;
   const user = users[userId];
-  console.log(user)
+  console.log(user);
   const urls = UserUrls(urlDatabase, userId);
   // if (!userId) {
   //   error = "NOT Registered!!/ NOT Loggedin!!";

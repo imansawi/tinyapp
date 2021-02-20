@@ -3,6 +3,7 @@ const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
 // // URLs Database
+// //====================================================
 // const urlDatabase = {
 //   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
 //   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
@@ -11,16 +12,17 @@ const salt = bcrypt.genSaltSync(saltRounds);
 // };
 
 // // Users Database
+// //====================================================
 // const users = {
 //   userRandomID: {
 //     id: "userRandomID",
 //     email: "user@example.com",
-//     password: bcrypt.hashSync("purple-monkey-dinosaur", salt),
+//     password: bcrypt.hashSync("purple-monkey-dinosaur", saltRounds),
 //   },
 //   user2RandomID: {
 //     id: "user2RandomID",
 //     email: "user2@example.com",
-//     password: bcrypt.hashSync("dishwasher-funk", salt),
+//     password: bcrypt.hashSync("dishwasher-funk", saltRounds),
 //   },
 // };
 
@@ -36,8 +38,10 @@ function generateRandomString() {
 // Get a User by Email
 //====================================================
 const findUserByEmail = (users, email) => {
+  console.log("Email = ", email);
   for (let userId in users) {
     if (users[userId].email === email) {
+      console.log("Email = ", users[userId]);
       return users[userId];
     }
   }
@@ -45,11 +49,12 @@ const findUserByEmail = (users, email) => {
 };
 
 //====================================================
-// Find URLs for a Specific User
+// Find all URLs for a Specific User
 //====================================================
 const UserUrls = function (urlDatabase, userID) {
+  console.log("DB ", urlDatabase, userID);
   let url = {};
-  for (const shortURL in urlDatabase) {
+  for (let shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userId === userID) {
       url[shortURL] = urlDatabase[shortURL].longURL;
     }
@@ -64,20 +69,19 @@ const userAuthentication = function (users, email, password) {
   //console.log("User:", users, email, password);
   const user = findUserByEmail(users, email);
   const id = user.id;
-  console.log("id ", id)
+  console.log("id ", id);
   if (id) {
-    /////// email found, check the password next
+    // email found, check the password next
     if (bcrypt.compareSync(password, users[id].password)) {
       // Success! GOOD Password
       return true;
     } else {
       return false;
     }
+  } else {
+    console.log("Bad Email!");
+    return false;
   }
-  //   else {
-  //   // Ultimate failure. BAD email. Don't care about the password
-  //   return false;
-  // }
 };
 //====================================================
 // Function Returns a URL by a Given shortURL
@@ -94,10 +98,11 @@ const findUrl = function (urlDatabase, shortURL) {
 // Function Returns Urls for an Autherized User
 //====================================================
 const userIdURLs = function (urlDatabase, userID) {
+  console.log("DB in userIdURLs: ", urlDatabase, "UserId: ", userID);
   let urlUser = {};
   for (const shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userId === userID) {
-      //..............................
+      //????????????????????????????????????
       urlUser[shortURL] = urlDatabase[shortURL];
     }
   }
@@ -105,9 +110,9 @@ const userIdURLs = function (urlDatabase, userID) {
 };
 
 //====================================================
-// Function Returns URLs for a User
+// Function Returns a URL accessed by a specific User
 //====================================================
-const URLsforUser = function (userId, shortURL, urlDatabase) {
+const findURLforSpecificUser = function (userId, shortURL, urlDatabase) {
   let error = "";
   let url = {};
   if (!urlDatabase[shortURL]) {
@@ -124,6 +129,7 @@ const URLsforUser = function (userId, shortURL, urlDatabase) {
     }
   }
   url["error"] = error;
+  console.log("specific Url for a user :", url);
   return url;
 };
 //============================================================
@@ -133,7 +139,6 @@ module.exports = {
   findUserByEmail,
   UserUrls,
   userAuthentication,
-  findUrl,
   userIdURLs,
-  URLsforUser,
+  findURLforSpecificUser,
 };

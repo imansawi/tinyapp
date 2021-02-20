@@ -13,9 +13,8 @@ const {
   findUserByEmail,
   UserUrls,
   userAuthentication,
-  findUrl,
   userIdURLs,
-  URLsforUser,
+  findURLforSpecificUser,
 } = require("./helper");
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,6 +36,7 @@ const urlDatabase = {
   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
   b6UTxQ: { longURL: "https://www.tsn.ca", userId: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userId: "aJ48lW" },
+  aaaaaa: { longURL: "https://www.uofk.edu", userId: "user3RandomID" },
 };
 
 // Users Database
@@ -52,6 +52,11 @@ const users = {
     email: "user2@example.com",
     password: bcrypt.hashSync("dishwasher-funk", saltRounds),
   },
+  user3RandomID: {
+    id: "user3RandomID",
+    email: "imansawi@hotmail.com",
+    password: bcrypt.hashSync("aaaaaa", saltRounds),
+  },
 };
 
 //====================================================
@@ -66,6 +71,9 @@ app.get(`/`, (req, res) => {
   }
 });
 
+app.post("/", (req, res) => {
+  res.send("Hello!");
+});
 //====================================================
 // (2) Get New URL
 //====================================================
@@ -107,11 +115,11 @@ app.get("/urls", (req, res) => {
   let error = "";
   const userId = req.session.user_id;
   const user = users[userId];
-  console.log(user);
+  console.log("UserId = ", userId, "User is:", user);
   const urls = UserUrls(urlDatabase, userId);
-  // if (!userId) {
-  //   error = "NOT Registered!!/ NOT Loggedin!!";
-  // }
+  if (!userId) {
+    error = "NOT Registered!!/ NOT Loggedin!!";
+  }
   let templateVars = { urls, user, error };
   res.render("urls_index", templateVars);
 });
@@ -132,10 +140,10 @@ app.get("/urls/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   const userId = req.session.user_id;
   const user = users[userId];
-
-  const url = URLsforUser(userId, shortURL, urlDatabase);
-  const error = url["error"];
   let longURL = "";
+
+  const url = findURLforSpecificUser(userId, shortURL, urlDatabase);
+  const error = url["error"];
   if (!error) {
     longURL = url[shortURL].longURL;
   } else {
@@ -154,7 +162,7 @@ app.post("/urls/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = req.body.longURL;
 
-  const url = UserUrls(userId, shortURL, urlDatabase);
+  const url = UserUrls(urlDatabase, userId);
   const error = url["error"];
   //const longURL = url[shortURL].longURL;
 
@@ -194,7 +202,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   const userId = req.session.user_id;
 
-  const userUrlsFound = UserUrls(userId, shortURL, urlDatabase);
+  const userUrlsFound = UserUrls(urlDatabase, userId);
   const user = users[userId];
   const urls = userIdURLs(urlDatabase, userId);
 
@@ -294,14 +302,14 @@ app.post("/login", (req, res) => {
 // (9) Get: Logout
 //====================================================
 // app.get("/logout", (req, res) => {
-  
+
 //   res.redirect("/urls");
 // });
 // (9) Post: Logout
 //==========================
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("urls");
+  res.redirect("/");
 });
 
 //====================================================

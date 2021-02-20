@@ -2,30 +2,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
-// // URLs Database
-// //====================================================
-// const urlDatabase = {
-//   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
-//   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
-//   b6UTxQ: { longURL: "https://www.tsn.ca", userId: "aJ48lW" },
-//   i3BoGr: { longURL: "https://www.google.ca", userId: "aJ48lW" },
-// };
-
-// // Users Database
-// //====================================================
-// const users = {
-//   userRandomID: {
-//     id: "userRandomID",
-//     email: "user@example.com",
-//     password: bcrypt.hashSync("purple-monkey-dinosaur", saltRounds),
-//   },
-//   user2RandomID: {
-//     id: "user2RandomID",
-//     email: "user2@example.com",
-//     password: bcrypt.hashSync("dishwasher-funk", saltRounds),
-//   },
-// };
-
 //====================================================
 // Generate a Random String
 //====================================================
@@ -52,7 +28,6 @@ const findUserByEmail = (users, email) => {
 // Find all URLs for a Specific User
 //====================================================
 const UserUrls = function (urlDatabase, userID) {
-  console.log("DB ", urlDatabase, userID);
   let url = {};
   for (let shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userId === userID) {
@@ -66,7 +41,6 @@ const UserUrls = function (urlDatabase, userID) {
 // Function Validates an Email & a Password with the UserDatabase
 //===============================================================
 const userAuthentication = function (users, email, password) {
-  //console.log("User:", users, email, password);
   const user = findUserByEmail(users, email);
   const id = user.id;
   console.log("id ", id);
@@ -83,6 +57,7 @@ const userAuthentication = function (users, email, password) {
     return false;
   }
 };
+
 //====================================================
 // Function Returns a URL by a Given shortURL
 //====================================================
@@ -98,12 +73,10 @@ const findUrl = function (urlDatabase, shortURL) {
 // Function Returns Urls for an Autherized User
 //====================================================
 const userIdURLs = function (urlDatabase, userID) {
-  console.log("DB in userIdURLs: ", urlDatabase, "UserId: ", userID);
   let urlUser = {};
-  for (const shortURL in urlDatabase) {
+  for (let shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userId === userID) {
-      //????????????????????????????????????
-      urlUser[shortURL] = urlDatabase[shortURL];
+      urlUser[shortURL] = urlDatabase[shortURL].longURL;
     }
   }
   return urlUser;
@@ -129,7 +102,6 @@ const findURLforSpecificUser = function (userId, shortURL, urlDatabase) {
     }
   }
   url["error"] = error;
-  console.log("specific Url for a user :", url);
   return url;
 };
 //============================================================

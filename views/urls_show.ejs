@@ -14,25 +14,25 @@
     <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %>
+        <h5 class="card-title">TinyURL for: <%= url[shortURL] %>
         </h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>">
             <%= shortURL %>
           </a></p>
       </div>
       <div class="card text-center">
-        <div class="card-header">Edit</div>
+        <h5 class="card-header">Edit</h5>
         <div class="card-body">
-          <h5 class="card-title">New URL: </h5>
+          <h6 class="card-title">New URL: </h6>
           <form method="POST" action="/urls/<%= shortURL %>">
-            <input name="newURL" value="<%= longURL %>">
+            <input name="longURL" value="<%= url[shortURL] %>">
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
         <div class="card-footer text-muted"></div>
-        <% if(error){ %>
+        <% if(url["error"]){ %>
           <span style="color:red;"><b>
-              <%= error %>
+              <%= url["error"] %>
             </b>
             <% } %>
       </div>

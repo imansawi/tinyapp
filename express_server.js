@@ -34,8 +34,8 @@ app.use(
 const urlDatabase = {
   b2xVn2: { longURL: "http://www.lighthouselabs.ca", userId: "userRandomID" },
   "9sm5xK": { longURL: "http://www.google.com", userId: "user2RandomID" },
-  b6UTxQ: { longURL: "https://www.tsn.ca", userId: "aJ48lW" },
-  i3BoGr: { longURL: "https://www.google.ca", userId: "aJ48lW" },
+  b6UTxQ: { longURL: "https://www.tsn.ca", userId: "user3RandomID" },
+  i3BoGr: { longURL: "https://www.google.ca", userId: "user3RandomID" },
   aaaaaa: { longURL: "https://www.uofk.edu", userId: "user3RandomID" },
 };
 
@@ -55,7 +55,7 @@ const users = {
   user3RandomID: {
     id: "user3RandomID",
     email: "imansawi@hotmail.com",
-    password: bcrypt.hashSync("aaaaaa", saltRounds),
+    password: bcrypt.hashSync("123456", saltRounds),
   },
 };
 
@@ -71,9 +71,6 @@ app.get(`/`, (req, res) => {
   }
 });
 
-app.post("/", (req, res) => {
-  res.send("Hello!");
-});
 //====================================================
 // (2) Get New URL
 //====================================================
@@ -97,7 +94,7 @@ app.post("/urls", (req, res) => {
   if (!userId) {
     const error = "Please Register/ Login!";
     let templateVars = { user, error };
-    res.render("urls_new", templateVars);
+    res.render("login", templateVars);
   } else {
     const userId = req.session.user_id;
     const longURL = req.body.longURL;
@@ -122,15 +119,7 @@ app.get("/urls", (req, res) => {
   }
   let templateVars = { urls, user, error };
   res.render("urls_index", templateVars);
-});
-
-// (2) Post URLs
-//================
-app.post("/urls", (req, res) => {
-  //console.log(req.body);  // Log the POST request body to the console
-  const newshortURL = generateRandomString();
-  urlDatabase[newshortURL] = req.body.longURL;
-  res.redirect("/urls");
+  console.log(user, urls);
 });
 
 //====================================================
@@ -143,13 +132,12 @@ app.get("/urls/:shortURL", (req, res) => {
   let longURL = "";
 
   const url = findURLforSpecificUser(userId, shortURL, urlDatabase);
-  const error = url["error"];
-  if (!error) {
-    longURL = url[shortURL].longURL;
+  if (!url["error"]) {
+    longURL = url[shortURL];
   } else {
     shortURL = "???";
   }
-  let templateVars = { url, user, error, shortURL, longURL };
+  let templateVars = { url, user, shortURL };
   res.render("urls_show", templateVars);
 });
 
@@ -162,19 +150,19 @@ app.post("/urls/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = req.body.longURL;
 
-  const url = UserUrls(urlDatabase, userId);
+  const url = findURLforSpecificUser(userId, shortURL, urlDatabase);
   const error = url["error"];
   //const longURL = url[shortURL].longURL;
 
   if (!error) {
     //Upadate the url in the database
-    urlDatabase[req.params.shortURL] = longURL;
+    urlDatabase[req.params.shortURL].longURL = longURL;
     res.redirect("/urls");
   } else {
     const user = users[userId];
     shortURL = "***";
-    longURL = "";
-    let templateVars = { user, error, shortURL, longURL };
+    url[shortURL] = "";
+    let templateVars = { user, error, url, shortURL };
     res.render("urls_show", templateVars);
   }
 });
@@ -188,7 +176,7 @@ app.get("/u/:shortURL", (req, res) => {
     res.statusCode = 404;
     res.render("404");
   } else {
-    const longUrl = urlDatabase[shortUrl].longURL;
+    let longUrl = urlDatabase[shortUrl].longURL;
     res.redirect(longUrl);
   }
 });
@@ -286,7 +274,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
 
   if (userAuthentication(users, email, password)) {
-    const userId = findUserByEmail(users, email);
+    const userId = findUserByEmail(users, email).id;
     req.session.user_id = userId;
     res.redirect("urls");
   } else {
@@ -299,12 +287,6 @@ app.post("/login", (req, res) => {
 });
 
 //====================================================
-// (9) Get: Logout
-//====================================================
-// app.get("/logout", (req, res) => {
-
-//   res.redirect("/urls");
-// });
 // (9) Post: Logout
 //==========================
 app.post("/logout", (req, res) => {
@@ -352,4 +334,8 @@ app.listen(PORT, () => {
 //   res.clearCookie("username");
 //   console.log("logout");
 //   res.redirect("/urls");
+// });
+
+// app.post("/", (req, res) => {
+//   res.send("Hello!");
 // });
